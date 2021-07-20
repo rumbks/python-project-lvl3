@@ -1,4 +1,3 @@
-from pathlib import Path
 from string import ascii_letters, digits
 
 from funcy import cut_prefix, merge, walk
@@ -12,16 +11,20 @@ def _without_schema(url: str) -> str:
     return cut_prefix(url, HTTPS)
 
 
-def get_full_path(directory_path: Path, filename: str):
-    return directory_path / filename
-
-
-def get_filename_to_save(url: str) -> str:
+def _build_name(url: str, postfix: ""):
     LETTERS_AND_DIGITS = ascii_letters + digits
     return merge(
         walk(
             lambda s: s if s in LETTERS_AND_DIGITS else '-',
             _without_schema(url),
         ),
-        ".html",
+        postfix,
     )
+
+
+def get_page_filename(url: str) -> str:
+    return _build_name(url, ".html")
+
+
+def get_assets_folder_name(url: str) -> str:
+    return _build_name(url, "_files")
