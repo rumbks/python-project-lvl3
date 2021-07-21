@@ -16,11 +16,12 @@ from page_loader.url import get_domain_name
 
 def download(url: str, save_to: Union[str, Path] = None) -> str:
     save_to = Path.cwd() if save_to is None else Path(save_to)
+    if not save_to.exists():
+        raise RuntimeError(f"Directory {save_to} does not exists.")
     response = requests.get(url)
     page_filename = get_page_filename(url)
     assets_directory = save_to / get_assets_folder_name(url)
-    if not assets_directory.exists():
-        assets_directory.mkdir()
+    assets_directory.mkdir(exist_ok=True)
 
     parsed_content = html.parse(response.text)
 
@@ -28,7 +29,6 @@ def download(url: str, save_to: Union[str, Path] = None) -> str:
     for img_tag in parsed_content.find_all('img'):
         img_url = img_tag['src']
         img_full_url = f"https://{domain_name}{img_url}"
-        # img_response = requests.get(img_full_url, stream=True)
         img_response = requests.get(img_full_url)
         asset_filename = get_asset_filename(img_url, domain_name)
         with open(assets_directory / asset_filename, 'wb') as file:

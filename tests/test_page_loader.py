@@ -51,7 +51,6 @@ def test_successful_download(
         resources_dir = path_to_page.parent / EXPECTED_RESOURCES_DIR
         assert resources_dir.exists()
         assert is_same(resources_dir / EXPECTED_IMAGE_FILENAME, IMAGE)
-        pass
 
 
 def test_error_nonexistent_directory_to_save(
