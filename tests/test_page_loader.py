@@ -7,7 +7,7 @@ from pytest import fixture
 from page_loader import download
 from tests.fixtures_paths import SIMPLE_HTML, SIMPLE_HTML_WITH_RESOURCES, IMAGE
 from tests.file import is_same, get_content
-from funcy import re_find
+from funcy import re_find, ilen
 
 PAGE_URL = "https://ru.hexlet.io/courses"
 IMAGE_URL = "https://ru.hexlet.io/resources/image.jpeg"
@@ -49,6 +49,7 @@ def test_successful_download(
         assert substituted_image_path == EXPECTED_IMAGE_PATH
 
         resources_dir = path_to_page.parent / EXPECTED_RESOURCES_DIR
+        assert ilen(resources_dir.iterdir()) == 1
         assert resources_dir.exists()
         assert is_same(resources_dir / EXPECTED_IMAGE_FILENAME, IMAGE)
 

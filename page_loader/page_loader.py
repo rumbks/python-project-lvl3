@@ -2,10 +2,10 @@ from functools import partial
 from pathlib import Path
 from typing import Union, List
 
-from funcy import walk
+from funcy import walk, select
 
 from page_loader import html
-from page_loader.html import get_images, Image, change_url
+from page_loader.html import get_images, Resource, change_url, in_same_domain
 from page_loader.io import web, file
 from page_loader.path import (
     get_page_filename,
@@ -30,8 +30,9 @@ def download(url: str, save_to: Union[str, Path] = None) -> str:
         assets_directory.mkdir(exist_ok=True)
 
     to_absolute = partial(to_absolute_url, url)
-    images: List[Image] = walk(
-        lambda img: Image(img.tag, to_absolute(img.url)), images
+    images = select(in_same_domain, images)
+    images: List[Resource] = walk(
+        lambda img: Resource(img.tag, to_absolute(img.url)), images
     )
 
     for image in images:
