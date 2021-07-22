@@ -1,4 +1,4 @@
-from typing import Tuple, List, NamedTuple
+from typing import List, NamedTuple
 from urllib.parse import urlparse
 
 from bs4 import BeautifulSoup, Tag

@@ -24,10 +24,12 @@ def simple_web_page_content():
     with open(SIMPLE_HTML) as f:
         return f.read()
 
+
 @fixture
 def image_file_content():
-    with open(IMAGE, 'rb') as f:
+    with open(IMAGE, "rb") as f:
         return f.read()
+
 
 @fixture
 def temporary_directory():
@@ -35,7 +37,10 @@ def temporary_directory():
 
 
 def test_successful_download(
-    requests_mock, temporary_directory, simple_web_page_content, image_file_content
+    requests_mock,
+    temporary_directory,
+    simple_web_page_content,
+    image_file_content,
 ):
     requests_mock.get(PAGE_URL, text=simple_web_page_content)
     requests_mock.get(IMAGE_URL, content=image_file_content)
@@ -45,7 +50,9 @@ def test_successful_download(
         assert path_to_page.name == EXPECTED_PAGE_FILENAME
         assert is_same(path_to_page, SIMPLE_HTML_WITH_RESOURCES)
 
-        substituted_image_path = re_find('(?<=img).*src="(.*)(?=">)', get_content(path_to_page))
+        substituted_image_path = re_find(
+            '(?<=img).*src="(.*)(?=">)', get_content(path_to_page)
+        )
         assert substituted_image_path == EXPECTED_IMAGE_PATH
 
         resources_dir = path_to_page.parent / EXPECTED_RESOURCES_DIR
@@ -61,4 +68,7 @@ def test_error_nonexistent_directory_to_save(
     nonexistent_directory = "/nonexistent"
     with pytest.raises(RuntimeError) as error:
         download(PAGE_URL, nonexistent_directory)
-        assert str(error.value) == f"Directory {nonexistent_directory} does not exists."
+        assert (
+            str(error.value)
+            == f"Directory {nonexistent_directory} does not exists."
+        )

@@ -17,4 +17,3 @@ def without_schema(url: str) -> str:
 def get_domain_name(url: str) -> str:
     parsed = urlparse(url)
     return parsed.netloc
-
