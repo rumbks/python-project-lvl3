@@ -24,10 +24,10 @@ def get_page_filename(url: str) -> str:
     return _build_name(url, ".html")
 
 
-def get_asset_filename(url: str, domain_name: str):
+def get_asset_filename(url: str):
     extension = get_extension(url)
     path = cut_suffix(url, extension)
-    return _build_name(f"{domain_name}{path}", extension)
+    return _build_name(path, extension)
 
 
 def get_assets_folder_name(url: str) -> str:
