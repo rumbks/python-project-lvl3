@@ -8,7 +8,7 @@ def parse(page_content: str) -> BeautifulSoup:
     return BeautifulSoup(page_content, features='html.parser')
 
 
-Resource = NamedTuple("Image", [('tag', Tag), ('url', str)])
+Resource = NamedTuple("Resource", [('tag', Tag), ('url', str)])
 
 IMG_URL_ATTR = 'src'
 
@@ -25,9 +25,12 @@ def get_images(parsed_html: BeautifulSoup) -> List[Resource]:
     ]
 
 
-def in_same_domain(resource: Resource) -> bool:
-    return not urlparse(resource.url).netloc
+def in_same_domain(root_page_url: str, resource: Resource) -> bool:
+    root_page_url = urlparse(root_page_url)
+    resource_url = urlparse(resource.url)
+
+    return not resource_url.netloc or resource_url.netloc == root_page_url.netloc
 
 
-def change_url(img: Resource, new_url: str) -> None:
+def change_resource_url(img: Resource, new_url: str) -> None:
     img.tag[IMG_URL_ATTR] = new_url

@@ -5,7 +5,7 @@ from typing import Union, List
 from funcy import walk, select
 
 from page_loader import html
-from page_loader.html import get_images, Resource, change_url, in_same_domain
+from page_loader.html import get_images, Resource, change_resource_url
 from page_loader.io import web, file
 from page_loader.path import (
     get_page_filename,
@@ -30,6 +30,7 @@ def download(url: str, save_to: Union[str, Path] = None) -> str:
         assets_directory.mkdir(exist_ok=True)
 
     to_absolute = partial(to_absolute_url, url)
+    in_same_domain = partial(html.in_same_domain, url)
     images = select(in_same_domain, images)
     images: List[Resource] = walk(
         lambda img: Resource(img.tag, to_absolute(img.url)), images
@@ -43,7 +44,7 @@ def download(url: str, save_to: Union[str, Path] = None) -> str:
             filename=asset_filename,
             content=img_bytes,
         )
-        change_url(image, str(Path(assets_directory.name) / asset_filename))
+        change_resource_url(image, str(Path(assets_directory.name) / asset_filename))
 
     file.save(
         directory=save_to,
