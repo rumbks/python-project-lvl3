@@ -10,12 +10,14 @@ from tests.file import is_same, get_content
 from funcy import re_find, ilen
 
 PAGE_URL = "https://ru.hexlet.io/courses"
-IMAGE_URL = "https://ru.hexlet.io/resources/image.jpeg"
+IMAGE_URL = "https://ru.hexlet.io/assets/image.jpeg"
 
 EXPECTED_PAGE_FILENAME = "ru-hexlet-io-courses.html"
 EXPECTED_RESOURCES_DIR = "ru-hexlet-io-courses_files"
 
-EXPECTED_IMAGE_FILENAME = "ru-hexlet-io-resources-image.jpeg"
+EXPECTED_IMAGE_FILENAME = "ru-hexlet-io-assets-image.jpeg"
+
+EXPECTED_CSS_FILENAME = "ru-hexlet-io-assets-application.css"
 EXPECTED_IMAGE_PATH = f"{EXPECTED_RESOURCES_DIR}/{EXPECTED_IMAGE_FILENAME}"
 
 
@@ -36,14 +38,16 @@ def temporary_directory():
     return tempfile.TemporaryDirectory()
 
 
-def test_successful_download(
-    requests_mock,
-    temporary_directory,
-    simple_web_page_content,
-    image_file_content,
-):
+@fixture
+def set_up_mocks(requests_mock, simple_web_page_content, image_file_content):
     requests_mock.get(PAGE_URL, text=simple_web_page_content)
     requests_mock.get(IMAGE_URL, content=image_file_content)
+
+
+def test_successful_download(
+    set_up_mocks,
+    temporary_directory,
+):
     with temporary_directory as directory:
         path_to_page = Path(download(PAGE_URL, directory))
 
