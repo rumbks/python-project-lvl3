@@ -37,7 +37,7 @@ def download(url: str, save_to: Union[str, Path] = None) -> str:
         assets,
     )
     in_same_domain = partial(is_asset_located_in_same_domain, url)
-    is_local_asset = all_fn(in_same_domain, contains_file, lambda asset: asset.type is AssetType.IMAGE)
+    is_local_asset = all_fn(in_same_domain, contains_file)
     local_assets = select(is_local_asset, assets)
 
     assets_directory = save_to / get_assets_folder_name(url)
