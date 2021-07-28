@@ -27,11 +27,12 @@ EXPECTED_IMAGE_FILENAME = "ru-hexlet-io-assets-image.jpeg"
 EXPECTED_CSS_FILENAME = "ru-hexlet-io-assets-application.css"
 EXPECTED_SCRIPT_FILENAME = "ru-hexlet-io-packs-js-runtime.js"
 
-# mapping from downloaded resources filenames to paths to their expected content
-RESOURCES = {
+# mapping from expected resources filenames to paths to their expected content
+EXPECTED_RESOURCES = {
     EXPECTED_IMAGE_FILENAME: IMAGE,
     EXPECTED_CSS_FILENAME: CSS,
     EXPECTED_SCRIPT_FILENAME: SCRIPT,
+    PAGE_URL: SIMPLE_HTML
 }
 
 
@@ -59,9 +60,9 @@ def test_successful_download(
         assert is_same(path_to_page, SIMPLE_HTML_WITH_LOCAL_URLS)
 
         resources_dir = path_to_page.parent / EXPECTED_RESOURCES_DIR
-        assert ilen(resources_dir.iterdir()) == len(RESOURCES)
+        assert ilen(resources_dir.iterdir()) == len(EXPECTED_RESOURCES)
         assert resources_dir.exists()
-        for resource_filename, expected in RESOURCES.items():
+        for resource_filename, expected in EXPECTED_RESOURCES.items():
             assert is_same(resources_dir / resource_filename, expected)
 
 
