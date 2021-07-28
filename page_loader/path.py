@@ -1,3 +1,4 @@
+from pathlib import Path
 from string import ascii_letters, digits
 
 from funcy import merge, walk, cut_suffix
@@ -6,7 +7,11 @@ from page_loader.url import without_schema
 
 
 def get_extension(path: str):
-    return merge(".", path.split(".")[-1])
+    """
+    Returns extension with "." if it presents
+    Otherwise returns ""
+    """
+    return Path(path).suffix
 
 
 def _build_name(url: str, postfix: str = ""):
@@ -25,7 +30,7 @@ def get_page_filename(url: str) -> str:
 
 
 def get_asset_filename(url: str):
-    extension = get_extension(url)
+    extension = get_extension(url) or ".html"
     path = cut_suffix(url, extension)
     return _build_name(path, extension)
 

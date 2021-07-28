@@ -30,12 +30,6 @@ def get_asset_type(tag: Tag):
     return type_
 
 
-def contains_file(asset: Asset) -> bool:
-    url = urlparse(asset.url)
-    path = Path(url.path)
-    return bool(path.suffix)
-
-
 def in_same_domain(root_page_url: str, asset: Asset) -> bool:
     root_page_url = urlparse(root_page_url)
     asset_url = urlparse(asset.url)

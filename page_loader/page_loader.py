@@ -9,7 +9,6 @@ from page_loader.assets import (
     get_assets,
     AssetType,
     in_same_domain as is_asset_located_in_same_domain,
-    contains_file,
 )
 from page_loader.html import Asset, change_asset_url
 from page_loader.io import web, file
@@ -37,8 +36,7 @@ def download(url: str, save_to: Union[str, Path] = None) -> str:
         assets,
     )
     in_same_domain = partial(is_asset_located_in_same_domain, url)
-    is_local_asset = all_fn(in_same_domain, contains_file)
-    local_assets = select(is_local_asset, assets)
+    local_assets = select(in_same_domain, assets)
 
     assets_directory = save_to / get_assets_folder_name(url)
     if local_assets:
