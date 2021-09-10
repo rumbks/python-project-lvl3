@@ -1,5 +1,6 @@
+from urllib.parse import urljoin, urlparse
+
 from funcy import cut_prefix
-from urllib.parse import urlparse, urljoin
 
 
 def to_absolute_url(root_page_url: str, relative_url: str) -> str:

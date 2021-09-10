@@ -1,12 +1,13 @@
 from enum import Enum
-from pathlib import Path
-from funcy import lkeep
-from typing import NamedTuple, List, Optional
+from typing import List, NamedTuple, Optional
 from urllib.parse import urlparse
 
 from bs4 import BeautifulSoup, Tag
+from funcy import lkeep
 
-AssetType = Enum("AssetType", [("IMAGE", "img"), ("LINK", "link"), ("SCRIPT", "script")])
+AssetType = Enum(
+    "AssetType", [("IMAGE", "img"), ("LINK", "link"), ("SCRIPT", "script")]
+)
 
 Asset = NamedTuple(
     "Asset", [('type', AssetType), ('tag', Tag), ('url', str)]
@@ -52,12 +53,6 @@ def get_assets(parsed_html: BeautifulSoup) -> List[Asset]:
     :param parsed_html: parsed content of html page
     :return: tuple(asset_type, asset_tag, asset_url)
     """
-    asset_tags = [
-        asset_tag
-        for asset_tag in parsed_html.find_all(
-            [asset_type.value for asset_type in AssetType]
-        )
-    ]
     return lkeep(
         [
             get_asset(asset_tag)

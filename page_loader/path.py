@@ -1,8 +1,7 @@
 from pathlib import Path
 from string import ascii_letters, digits
 
-from funcy import merge, walk, cut_suffix
-
+from funcy import cut_suffix, merge, walk
 from page_loader.url import without_schema
 
 

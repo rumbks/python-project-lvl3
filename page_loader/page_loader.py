@@ -1,22 +1,18 @@
 from functools import partial
 from pathlib import Path
-from typing import Union, List
+from typing import List, Union
 
-from funcy import walk, select
-
+from funcy import select, walk
 from page_loader import html
-from page_loader.assets import (
-    get_assets,
-    AssetType,
-    in_same_domain as is_asset_located_in_same_domain,
-)
+from page_loader.assets import AssetType, get_assets
+from page_loader.assets import in_same_domain as is_asset_located_in_same_domain
 from page_loader.html import Asset, change_asset_url
-from page_loader.io import web, file
+from page_loader.io import file, web
 from page_loader.logging import logger
 from page_loader.path import (
-    get_page_filename,
-    get_assets_folder_name,
     get_asset_filename,
+    get_assets_folder_name,
+    get_page_filename,
 )
 from page_loader.url import to_absolute_url
 

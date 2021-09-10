@@ -1,7 +1,6 @@
 from typing import Union
 
 import requests
-
 from page_loader.logging import logger
 
 

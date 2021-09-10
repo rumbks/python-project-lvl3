@@ -1,6 +1,5 @@
 from bs4 import BeautifulSoup
-
-from page_loader.assets import Asset, ASSET_ATTR
+from page_loader.assets import ASSET_ATTR, Asset
 
 
 def parse(page_content: str) -> BeautifulSoup:
