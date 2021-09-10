@@ -1,6 +1,7 @@
 from enum import Enum
 from pathlib import Path
-from typing import NamedTuple, List
+from funcy import lkeep
+from typing import NamedTuple, List, Optional
 from urllib.parse import urlparse
 
 from bs4 import BeautifulSoup, Tag
@@ -37,16 +38,31 @@ def in_same_domain(root_page_url: str, asset: Asset) -> bool:
     return not asset_url.netloc or asset_url.netloc == root_page_url.netloc
 
 
+def get_asset(asset_tag: Tag) -> Optional[Asset]:
+    """Returns None if tag contains inline script"""
+    asset_type = get_asset_type(asset_tag)
+    url = asset_tag.get(ASSET_ATTR[asset_type], None)
+    if url is None:
+        return None
+    return Asset(asset_type, asset_tag, url)
+
+
 def get_assets(parsed_html: BeautifulSoup) -> List[Asset]:
     """
     :param parsed_html: parsed content of html page
     :return: tuple(asset_type, asset_tag, asset_url)
     """
-    return [
-        Asset(
-            get_asset_type(asset_tag),
-            asset_tag,
-            asset_tag[ASSET_ATTR[get_asset_type(asset_tag)]],
+    asset_tags = [
+        asset_tag
+        for asset_tag in parsed_html.find_all(
+            [asset_type.value for asset_type in AssetType]
         )
-        for asset_tag in parsed_html.find_all([asset_type.value for asset_type in AssetType])
     ]
+    return lkeep(
+        [
+            get_asset(asset_tag)
+            for asset_tag in parsed_html.find_all(
+                [asset_type.value for asset_type in AssetType]
+            )
+        ]
+    )
