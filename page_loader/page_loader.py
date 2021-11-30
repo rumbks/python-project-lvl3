@@ -3,6 +3,8 @@ from pathlib import Path
 from typing import List, Union
 
 from funcy import select, walk
+from progress.bar import Bar
+
 from page_loader import html
 from page_loader.assets import AssetType, get_assets
 from page_loader.assets import in_same_domain as is_asset_located_in_same_domain
@@ -43,7 +45,9 @@ def download(url: str, save_to: Union[str, Path] = None) -> str:
     if local_assets:
         assets_directory.mkdir(exist_ok=True)
 
-    for i, asset in enumerate(local_assets, 1):
+    for i, asset in Bar('Downloading resources:', max=len(local_assets)).iter(
+        enumerate(local_assets, 1)
+    ):
         asset_filename = get_asset_filename(asset.url)
         logger.info(f"Downloading asset {i}. Tag is {asset.tag}.")
         asset_file_content = web.download(
