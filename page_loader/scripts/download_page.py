@@ -1,6 +1,14 @@
 import argparse
+import sys
+
+import requests
 
 from page_loader import download
+from page_loader.logging import error_logger
+
+OK_CODE = 0
+NETWORK_ERROR_CODE = 1
+PERMISSIONS_ERROR_CODE = 2
 
 
 def main():
@@ -14,8 +22,16 @@ def main():
         help="output directory",
     )
     args = parser.parse_args()
-    path_to_page = download(args.url, args.output)
+    try:
+        path_to_page = download(args.url, args.output)
+    except requests.RequestException as error:
+        error_logger.error(str(error))
+        sys.exit(NETWORK_ERROR_CODE)
+    except PermissionError as error:
+        error_logger.error(str(error))
+        sys.exit(PERMISSIONS_ERROR_CODE)
     print(path_to_page)
+    sys.exit(OK_CODE)
 
 
 if __name__ == '__main__':

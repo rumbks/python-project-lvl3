@@ -29,7 +29,7 @@ def download(url: str, save_to: Union[str, Path] = None) -> str:
     parsed_page = html.parse(page_text)
 
     assets = get_assets(parsed_page)
-    logger.info(f"There's {len(assets)} asserts inside the page.")
+    logger.info(f"There's {len(assets)} assets inside the page.")
     to_absolute = partial(to_absolute_url, url)
     assets: List[Asset] = walk(
         lambda asset: Asset(asset.type, asset.tag, to_absolute(asset.url)),
