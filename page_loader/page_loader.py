@@ -66,6 +66,6 @@ def download(url: str, save_to: Union[str, Path] = None) -> str:
     file.save(
         directory=save_to,
         filename=page_filename,
-        content=parsed_page.prettify(formatter='html5'),
+        content=parsed_page.prettify(),
     )
     return str(save_to / page_filename)

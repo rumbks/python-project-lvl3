@@ -112,6 +112,7 @@ def test_http_error(temporary_directory, url, exception, message, caplog):
             download(url, directory)
         assert str(error.value) == message
 
+
 @pytest.mark.usefixtures('set_up_requests_mocks')
 def test_file_write_error(temporary_directory):
     with temporary_directory as directory:
