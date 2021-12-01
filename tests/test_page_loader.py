@@ -74,12 +74,10 @@ def test_successful_download(temporary_directory):
 @pytest.mark.usefixtures('set_up_requests_mocks')
 def test_error_nonexistent_directory_to_save():
     nonexistent_directory = "/nonexistent"
-    with pytest.raises(RuntimeError) as error:
+    with pytest.raises(FileNotFoundError) as error:
         download(PAGE_URL, nonexistent_directory)
-        assert (
-            str(error.value)
-            == f"Directory {nonexistent_directory} does not exists."
-        )
+    assert "No such file or directory" in str(error.value)
+    assert "/nonexistent" in str(error.value)
 
 
 @fixture
