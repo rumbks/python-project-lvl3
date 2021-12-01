@@ -23,10 +23,6 @@ from page_loader.url import to_absolute_url
 
 def download(url: str, save_to: Union[str, Path] = None) -> str:
     save_to = Path.cwd() if save_to is None else Path(save_to)
-    if not save_to.exists():
-        error_message = f"Directory {save_to} does not exists."
-        logger.error(error_message)
-        raise RuntimeError(error_message)
     page_text = web.download(url)
     page_filename = get_page_filename(url)
 

@@ -9,6 +9,7 @@ from page_loader.logging import error_logger
 OK_CODE = 0
 NETWORK_ERROR_CODE = 1
 PERMISSIONS_ERROR_CODE = 2
+NONEXISTENT_OUTPUT_DIR_CODE = 3
 
 
 def main():
@@ -27,6 +28,9 @@ def main():
     except requests.RequestException as error:
         error_logger.error(str(error))
         sys.exit(NETWORK_ERROR_CODE)
+    except FileNotFoundError as error:
+        error_logger.error(str(error))
+        sys.exit(NONEXISTENT_OUTPUT_DIR_CODE)
     except PermissionError as error:
         error_logger.error(str(error))
         sys.exit(PERMISSIONS_ERROR_CODE)
