@@ -86,7 +86,9 @@ def test_error_nonexistent_directory_to_save():
 def set_up_requests_mocks_errors(requests_mock):
     requests_mock.get(URL_STATUS_400, status_code=400, reason=ERROR_REASON)
     requests_mock.get(URL_STATUS_500, status_code=500, reason=ERROR_REASON)
-    requests_mock.get(URL_TIMEOUT, exc=requests.exceptions.Timeout(ERROR_REASON))
+    requests_mock.get(
+        URL_TIMEOUT, exc=requests.exceptions.Timeout(ERROR_REASON)
+    )
 
 
 @pytest.mark.parametrize(
@@ -120,4 +122,3 @@ def test_file_write_error(temporary_directory):
         with pytest.raises(PermissionError) as error:
             download(PAGE_URL, directory)
         assert "Permission denied" in str(error.value)
-

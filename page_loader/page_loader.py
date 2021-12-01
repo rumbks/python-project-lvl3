@@ -6,8 +6,10 @@ from funcy import select, walk
 from progress.bar import Bar
 
 from page_loader import html
-from page_loader.assets import AssetType, get_assets
-from page_loader.assets import in_same_domain as is_asset_located_in_same_domain
+from page_loader.assets import (
+    get_assets,
+    in_same_domain as is_asset_located_in_same_domain,
+)
 from page_loader.html import Asset, change_asset_url
 from page_loader.io import file, web
 from page_loader.logging import logger
