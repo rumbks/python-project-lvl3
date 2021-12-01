@@ -51,7 +51,7 @@ def download(url: str, save_to: Union[str, Path] = None) -> str:
         asset_filename = get_asset_filename(asset.url)
         logger.info(f"Downloading asset {i}. Tag is {asset.tag}.")
         asset_file_content = web.download(
-            asset.url, bytes=asset.type is AssetType.IMAGE
+            asset.url, bytes=True
         )
         file.save(
             directory=assets_directory,
