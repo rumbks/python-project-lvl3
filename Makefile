@@ -10,7 +10,7 @@ package-install:
 	python3 -m pip install --user dist/*.whl
 
 test-coverage:
-	poetry run pytest --cov=gendiff --cov-report xml
+	poetry run pytest --cov=page_loader --cov-report xml
 
 reinstall: install build
 	python3 -m pip install --user dist/*.whl --force-reinstall
