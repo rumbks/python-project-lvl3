@@ -8,7 +8,7 @@ from funcy import ilen
 from pytest import fixture
 
 from page_loader import download
-from tests.file import is_same, get_content
+from tests.file import get_content
 from tests.fixtures_paths import (
     SIMPLE_HTML,
     SIMPLE_HTML_WITH_LOCAL_URLS,
@@ -62,13 +62,17 @@ def test_successful_download(temporary_directory):
         path_to_page = Path(download(PAGE_URL, directory))
 
         assert path_to_page.name == EXPECTED_PAGE_FILENAME
-        assert is_same(path_to_page, SIMPLE_HTML_WITH_LOCAL_URLS)
+        assert get_content(path_to_page) == get_content(
+            SIMPLE_HTML_WITH_LOCAL_URLS
+        )
 
         resources_dir = path_to_page.parent / EXPECTED_RESOURCES_DIR
         assert ilen(resources_dir.iterdir()) == len(EXPECTED_RESOURCES)
         assert resources_dir.exists()
         for resource_filename, expected in EXPECTED_RESOURCES.items():
-            assert is_same(resources_dir / resource_filename, expected)
+            assert get_content(
+                resources_dir / resource_filename, bytes=True
+            ) == get_content(expected, bytes=True)
 
 
 @pytest.mark.usefixtures('set_up_requests_mocks')
