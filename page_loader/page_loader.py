@@ -21,8 +21,7 @@ from page_loader.path import (
 from page_loader.url import to_absolute_url
 
 
-def download(url: str, save_to: Union[str, Path] = None) -> str:
-    save_to = Path.cwd() if save_to is None else Path(save_to)
+def download(url: str, save_to: Union[str, Path] = Path.cwd()) -> str:
     page_text = web.download(url)
     page_filename = get_page_filename(url)
 
