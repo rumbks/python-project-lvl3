@@ -54,13 +54,14 @@ def main():
     except PermissionError as exception:
         handle_exception(
             exception,
-            user_error_message=f"Insufficient permissions for output directory {args.output}",
+            user_error_message=(f"Insufficient permissions "
+                                f"for output directory {args.output}"),
             exit_code=PERMISSIONS_ERROR_CODE,
         )
     except Exception as exception:
         handle_exception(
             exception,
-            user_error_message=f"Something went wrong, try again...",
+            user_error_message="Something went wrong, try again...",
             exit_code=UNKNOWN_ERROR_CODE,
         )
 
