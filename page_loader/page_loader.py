@@ -33,7 +33,7 @@ def download(url: str, save_to: Union[str, Path] = Path.cwd()) -> str:
     logger.info(f"There's {len(assets)} assets inside the page.")
     to_absolute = partial(to_absolute_url, url)
     assets: List[Asset] = walk(
-        lambda asset: Asset(asset.type, asset.tag, to_absolute(asset.url)),
+        lambda asset: Asset(asset.tag, to_absolute(asset.url)),
         assets,
     )
     in_same_domain = partial(is_asset_located_in_same_domain, url)

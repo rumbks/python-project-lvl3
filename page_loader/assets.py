@@ -1,35 +1,22 @@
-from enum import Enum
 from typing import List, NamedTuple, Optional
 from urllib.parse import urlparse
 
 from bs4 import BeautifulSoup, Tag
 from funcy import lkeep
 
-AssetType = Enum(
-    "AssetType", [("IMAGE", "img"), ("LINK", "link"), ("SCRIPT", "script")]
-)
+
+ASSET_TAG_NAMES = ('img', 'link', 'script')
 
 Asset = NamedTuple(
-    "Asset", [('type', AssetType), ('tag', Tag), ('url', str)]
+    "Asset", [('tag', Tag), ('url', str)]
 )
 
-ASSET_ATTR = {
-    AssetType.IMAGE: 'src',
-    AssetType.LINK: 'href',
-    AssetType.SCRIPT: 'src',
+
+TAG_LINK_ATTR_NAME = {
+    'img': 'src',
+    'link': 'href',
+    'script': 'src'
 }
-
-
-def get_asset_type(tag: Tag):
-    if tag.name == 'link':
-        type_ = AssetType.LINK
-    elif tag.name == 'img':
-        type_ = AssetType.IMAGE
-    elif tag.name == 'script':
-        type_ = AssetType.SCRIPT
-    else:
-        raise RuntimeError(f"Can't determine resource type for tag {tag}")
-    return type_
 
 
 def in_same_domain(root_page_url: str, asset: Asset) -> bool:
@@ -41,11 +28,10 @@ def in_same_domain(root_page_url: str, asset: Asset) -> bool:
 
 def get_asset(asset_tag: Tag) -> Optional[Asset]:
     """Returns None if tag contains inline script"""
-    asset_type = get_asset_type(asset_tag)
-    url = asset_tag.get(ASSET_ATTR[asset_type], None)
+    url = asset_tag.get(TAG_LINK_ATTR_NAME[asset_tag.name], None)
     if url is None:
         return None
-    return Asset(asset_type, asset_tag, url)
+    return Asset(asset_tag, url)
 
 
 def get_assets(parsed_html: BeautifulSoup) -> List[Asset]:
@@ -54,10 +40,8 @@ def get_assets(parsed_html: BeautifulSoup) -> List[Asset]:
     :return: tuple(asset_type, asset_tag, asset_url)
     """
     return lkeep(
-        [
-            get_asset(asset_tag)
-            for asset_tag in parsed_html.find_all(
-                [asset_type.value for asset_type in AssetType]
-            )
-        ]
+        get_asset(asset_tag)
+        for asset_tag in parsed_html.find_all(
+            ASSET_TAG_NAMES
+        )
     )

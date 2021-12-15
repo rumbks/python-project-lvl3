@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-from page_loader.assets import ASSET_ATTR, Asset
+from page_loader.assets import TAG_LINK_ATTR_NAME, Asset
 
 
 def parse(page_content: str) -> BeautifulSoup:
@@ -7,4 +7,4 @@ def parse(page_content: str) -> BeautifulSoup:
 
 
 def change_asset_url(asset: Asset, new_url: str) -> None:
-    asset.tag[ASSET_ATTR[asset.type]] = new_url
+    asset.tag[TAG_LINK_ATTR_NAME[asset.tag.name]] = new_url
