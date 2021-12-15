@@ -13,17 +13,18 @@ from page_loader.assets import (
 from page_loader.html import Asset, change_asset_url
 from page_loader.io import file, web
 from page_loader.logging import logger
-from page_loader.path import (
-    get_asset_filename,
-    get_assets_folder_name,
-    get_page_filename,
+from page_loader.url import (
+    to_absolute_url,
+    to_page_filename,
+    to_asset_filename,
+    to_assets_folder_name,
 )
-from page_loader.url import to_absolute_url
 
 
 def download(url: str, save_to: Union[str, Path] = Path.cwd()) -> str:
+    save_to = Path(save_to)
     page_text = web.download(url)
-    page_filename = get_page_filename(url)
+    page_filename = to_page_filename(url)
 
     parsed_page = html.parse(page_text)
 
@@ -38,14 +39,14 @@ def download(url: str, save_to: Union[str, Path] = Path.cwd()) -> str:
     local_assets = select(in_same_domain, assets)
     logger.info(f"{len(local_assets)} of them are local.")
 
-    assets_directory = save_to / get_assets_folder_name(url)
+    assets_directory = save_to / to_assets_folder_name(url)
     if local_assets:
         assets_directory.mkdir(exist_ok=True)
 
     for i, asset in Bar('Downloading resources:', max=len(local_assets)).iter(
         enumerate(local_assets, 1)
     ):
-        asset_filename = get_asset_filename(asset.url)
+        asset_filename = to_asset_filename(asset.url)
         logger.info(f"Downloading asset {i}. Tag is {asset.tag}.")
         asset_file_content = web.download(
             asset.url, bytes=True
