@@ -2,6 +2,7 @@ from functools import partial
 from pathlib import Path
 from typing import List, Union
 
+import requests
 from funcy import select, walk
 from progress.bar import Bar
 
@@ -48,9 +49,14 @@ def download(url: str, save_to: Union[str, Path] = Path.cwd()) -> str:
     ):
         asset_filename = to_asset_filename(asset.url)
         logger.info(f"Downloading asset {i}. Tag is {asset.tag}.")
-        asset_file_content = web.download(
-            asset.url, bytes=True
-        )
+        try:
+            asset_file_content = web.download(asset.url, bytes=True)
+        except requests.RequestException as error:
+            logger.warning(
+                f"Error occurred while downloading asset {i}:\n{error}"
+            )
+            continue
+
         file.save(
             directory=assets_directory,
             filename=asset_filename,
